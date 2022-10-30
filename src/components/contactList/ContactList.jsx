@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { ListItem } from "components/listItem";
 import { List } from './ContactList.styled';
 
-
 export const ContactList = ({filteredContacts, onDeleteContact}) => {
 
     return <List>
@@ -15,9 +14,29 @@ export const ContactList = ({filteredContacts, onDeleteContact}) => {
                         onDeleteContact={() => onDeleteContact(contact.id)}
                     />)                
             }            
-        </List>
-            
+        </List>            
 }
+
+// export class ContactList extends Component {   
+    
+//     onClickHandle = (id) => {        
+//         this.props.onDeleteContact(id)
+//     }
+
+//     render() {        
+//         return this.props.filteredContacts.length > 0 &&
+//             <List>
+//                 {
+//                 this.props.filteredContacts.map(contact =>
+//                     <ListItem
+//                         key={contact.id}
+//                         contact={contact}
+//                         onDeleteContact={() => this.onClickHandle(contact.id)}
+//                     />)
+//                 }
+//             </List>            
+//     }
+// }
 
 ContactList.propTypes = {
     filteredContacts: PropTypes.arrayOf(PropTypes.shape({
@@ -27,24 +46,3 @@ ContactList.propTypes = {
     }).isRequired).isRequired,
     onDeleteContact: PropTypes.func.isRequired,
 }
-
-// export class ContactList extends Component {
-    
-//     onClickHandle = (e) => {        
-//         this.props.onDeleteContact(e.currentTarget.id)
-//     }
-
-//     render() {        
-//         return this.props.filteredContacts.length > 0 ?
-//             <ul>
-//                 {
-//                 this.props.filteredContacts.map(contact =>
-//                 <li key={contact.id}>
-//                     <p>{contact.name}: {contact.number}</p>
-//                     <button type="button" id={contact.id} onClick={(this.onClickHandle)}>Delete</button>
-//                 </li>)
-//                 }
-//             </ul>
-//             : <p>Sorry, there's no contact mathing your querry</p>        
-//     }
-// }

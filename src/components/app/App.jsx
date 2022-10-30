@@ -6,12 +6,29 @@ import { ContactForm } from '../contactForm';
 import { NotifyText } from './App.styled';
 import { Container } from './App.styled';
 
-   
+const LS_KEY = 'MyContacts';
+
 export class App extends Component {
 
   state = {
     contacts: [],
-    filter: '',
+    filter: '',    
+  }
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem(LS_KEY));
+    
+    if (contacts) {
+      this.setState({ contacts })
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    const savedContacts = JSON.stringify(this.state.contacts);
+    
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(LS_KEY, savedContacts);      
+    }    
   }
 
   filterContacts = (e) => {
@@ -49,10 +66,11 @@ export class App extends Component {
   }
   
   render() {
-    const normalizedFilter = this.state.filter.toLowerCase().trim();
-    const filteredContacts = this.state.contacts.filter(contact =>
+    const { contacts, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase().trim();
+    const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter));
-    
+  
     return <Container >
       <h1>Phonebook</h1>
       <ContactForm
@@ -60,18 +78,18 @@ export class App extends Component {
       />
       <h2>Contacts</h2>
       <Filter
-        filter={this.state.filter}
+        filter={filter}
         onFilterContacts={this.filterContacts} />
-      {this.state.contacts.length !==0 &&
+      {contacts.length !==0 &&
         <ContactList          
           filteredContacts={filteredContacts}
           onDeleteContact={this.deleteContact}
         />
       }
-      {filteredContacts.length === 0 && this.state.contacts.length !== 0 &&
+      { contacts.length !== 0 && filteredContacts.length === 0 &&
           <NotifyText>Sorry, there's no contact matching your querry</NotifyText>
       }
-      {this.state.contacts.length === 0 && normalizedFilter !== '' &&
+      {  contacts.length === 0 && normalizedFilter !== '' &&
           <NotifyText>There's no contact in your Phonebook</NotifyText>
       }
     </Container>
